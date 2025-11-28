@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Glitch Detection App</title>
+    <style>
+        body {
+            background-color: #1e3a8a;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #1e3a8a;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1e40af;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .error {
+            color: #ffcc00;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Life Glitch Detection App</h1>
+        
+        <div class="input-group">
+            <label for="sleep">Sleep Hours:</label>
+            <input type="number" id="sleep" placeholder="Enter hours of sleep">
+        </div>
+        
+        <div class="input-group">
+            <label for="mood">Mood (1-5):</label>
+            <input type="number" id="mood" placeholder="Enter mood level (1-5)">
+        </div>
+        
+        <div class="input-group">
+            <label for="productivity">Productivity (1-5):</label>
+            <input type="number" id="productivity" placeholder="Enter productivity level (1-5)">
+        </div>
+        
+        <div class="input-group">
+            <label for="exercise">Exercise (Yes/No):</label>
+            <input type="text" id="exercise" placeholder="Enter Yes or No">
+        </div>
+        
+        <button id="analyze-btn">Analyze My Day</button>
+        
+        <div class="error" id="error-msg">
+            Please enter valid numeric values for sleep, mood, productivity and only yes or no for exercise.
+        </div>
+        
+        <div class="result" id="result-container">
+            <h2>Your Daily Analysis</h2>
+            <div id="result-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('analyze-btn').addEventListener('click', function() {
+            // Get values from input fields
+            const sleep = document.getElementById('sleep').value;
+            const mood = document.getElementById('mood').value;
+            const productivity = document.getElementById('productivity').value;
+            const exercise = document.getElementById('exercise').value.toLowerCase();
+            
+            // Hide previous results and errors
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'none';
+            
+            // Validate inputs
+            if (!sleep || !mood || !productivity || !exercise) {
+                showError();
+                return;
+            }
+            
+            if (isNaN(sleep) || isNaN(mood) || isNaN(productivity)) {
+                showError();
+                return;
+            }
+            
+            if (exercise !== 'yes' && exercise !== 'no') {
+                showError();
+                return;
+            }
+            
+            // Convert to numbers
+            const sleepNum = parseInt(sleep);
+            const moodNum = parseInt(mood);
+            const productivityNum = parseInt(productivity);
+            
+            // Analyze the data
+            let result = "";
+            
+            // Sleep check
+            if (sleepNum < 7) {
+                result += "Try to cover 7 hours for better sleep schedule.<br>";
+            } else if (sleepNum > 9) {
+                result += "You overslept. Try to manage your sleep schedule.<br>";
+            } else {
+                result += "Great! You slept well today.<br>";
+            }
+            
+            // Mood check
+            if (moodNum <= 2) {
+                result += "Your mood seems low today. Listen to music or take a deep breath.<br>";
+            } else if (moodNum == 3) {
+                result += "Your mood seems average today. Try to be cheerful and involve in activities.<br>";
+            } else {
+                result += "Your mood seems stable today. That's nice!<br>";
+            }
+            
+            // Productivity check
+            if (productivityNum < 3) {
+                result += "Your productivity is low. Try starting with one small task.<br>";
+            } else if (productivityNum == 3) {
+                result += "Your productivity seems to be normal today. Try to improve it.<br>";
+            } else {
+                result += "Good productivity! You're improving.<br>";
+            }
+            
+            // Exercise check
+            if (exercise === "yes") {
+                result += "Great! Exercise helps to uplift mood and productivity overall goodness.<br>";
+            } else if (exercise === "no") {
+                result += "Try to add exercise at least 30 minutes. It's good for you.<br>";
+            }
+            
+            // Motivation
+            result += "<br><strong>MOTIVATION:</strong> Small changes in lifestyle make things better. Make a better version of you everyday. Keep going!";
+            
+            // Display results
+            document.getElementById('result-content').innerHTML = result;
+            document.getElementById('result-container').style.display = 'block';
+        });
+        
+        function showError() {
+            document.getElementById('error-msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
